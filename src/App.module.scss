@@ -1,0 +1,62 @@
+.container {
+  margin: 0 auto;
+  max-width: 700px;
+}
+
+.vendingTopContainer {
+  perspective: 600px;
+}
+
+.vendingTop {
+  width: 89.6%;
+  height: 65px;
+  background-color: #5f0874;
+  border-radius: 5px 5px 0 0;
+  transform: rotateX(65deg) translateY(36px) translateX(5.8%);
+}
+.vending {
+  background-color: #9c0fbe;
+  display: flex;
+  border: 1px solid #000;
+
+  &__content {
+    width: 70%;
+    padding: 20px;
+    border-right: 1px solid #000;
+
+    &--items {
+      padding: 10px;
+      background-color: #5f0874;
+      border-radius: 20px;
+    }
+
+    .door {
+      width: 100%;
+      height: 70px;
+      background: rgb(73,72,72);
+      background: linear-gradient(180deg, rgba(73,72,72,1) 0%, rgba(41,41,41,1) 90%);
+      text-align: center;
+      border-radius: 0 0 10px 10px;
+
+      h2 {
+        color: #ffcf32;
+        line-height: 70px;
+      }
+    }
+  }
+
+  &__aside {
+    width: 30%;
+    padding: 20px 30px;
+
+    &--logo {
+      margin: 0 auto;
+      width: 80%;
+      margin-bottom: 20px;
+
+      img {
+        width: 100%;
+      }
+    }
+  }
+}
