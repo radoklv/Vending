@@ -1,25 +1,54 @@
-import React from "react";
+import React, { useState } from "react";
+import _ from "lodash";
+import clsx from "clsx";
 
 import type { ControlPanelTypes } from "./ControlPanel.types";
 import styles from "./ControlPanel.module.scss";
 
 const ControlPanel: React.FC<ControlPanelTypes> = (props) => {
+  const [message, setMessage] = useState("Choose product");
+
+  const onKeyPress = (e: any) => {
+    console.log(e.target.value);
+  };
+
   return (
     <div className={styles.controlPanel}>
       <div className={styles.display}>
-        <input type="text" readOnly />
+        <input type="text" readOnly value={message} />
       </div>
 
-      <div className={styles.keypad}>
-        <button className={styles.key}>1</button>
-        <button className={styles.key}>2</button>
-        <button className={styles.key}>3</button>
-        <button className={styles.key}>4</button>
-        <button className={styles.key}>5</button>
-        <button className={styles.key}>6</button>
-        <button className={styles.key}>7</button>
-        <button className={styles.key}>8</button>
-        <button className={styles.key}>9</button>
+      <div className={styles.keypad} onClick={(e) => onKeyPress(e)}>
+        <button className={styles.key} value={1}>
+          1
+        </button>
+        <button className={styles.key} value={2}>
+          2
+        </button>
+        <button className={styles.key} value={3}>
+          3
+        </button>
+        <button className={styles.key} value={4}>
+          4
+        </button>
+        <button className={styles.key} value={5}>
+          5
+        </button>
+        <button className={styles.key} value={6}>
+          6
+        </button>
+        <button className={styles.key} value={7}>
+          7
+        </button>
+        <button className={styles.key} value={8}>
+          8
+        </button>
+        <button className={styles.key} value={9}>
+          9
+        </button>
+        <button className={clsx(styles.key, styles['key--fullWidth'])} value={0}>
+          0
+        </button>
       </div>
 
       <span>Coins</span>
