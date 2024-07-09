@@ -1,1 +1,3 @@
-export type ControlPanelTypes = {};
+export type ControlPanelTypes = {
+  onSelectItem: (value: string) => void;
+};

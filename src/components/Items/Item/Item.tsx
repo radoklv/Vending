@@ -8,7 +8,7 @@ const Item: React.FC<ItemProps> = ({ item }) => {
 
   return (
     <li className={styles.item}>
-      <img src={`/images/${imageName}`} alt={name} />
+      <img src={`/images/products/${imageName}`} alt={name} />
       <span className={styles.price}>{`(${id}) ${price}лв`}</span>
     </li>
   );

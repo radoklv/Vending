@@ -1,24 +1,46 @@
-import React, { useState } from "react";
-import _ from "lodash";
+import React, { useCallback, useEffect, useState } from "react";
+import { debounce } from "lodash";
 import clsx from "clsx";
 
 import type { ControlPanelTypes } from "./ControlPanel.types";
 import styles from "./ControlPanel.module.scss";
 
-const ControlPanel: React.FC<ControlPanelTypes> = (props) => {
-  const [message, setMessage] = useState("Choose product");
+const ControlPanel: React.FC<ControlPanelTypes> = ({ onSelectItem }) => {
+  const [inputValue, setInputValue] = useState("Select product");
 
-  const onKeyPress = (e: any) => {
-    console.log(e.target.value);
+  const onKeyPress = (e: React.MouseEvent<HTMLButtonElement>) => {
+    if (inputValue === "Select product") {
+      setInputValue("");
+    }
+
+    const value = (e.target as HTMLButtonElement).value;
+
+    setInputValue((prev) => prev + value);
   };
+
+  useEffect(() => {
+    let timer = setTimeout(() => {
+      setInputValue("Select product");
+      onSelectItem(inputValue);
+    }, 2000);
+
+    return () => {
+      clearTimeout(timer);
+    };
+  }, [inputValue]);
 
   return (
     <div className={styles.controlPanel}>
       <div className={styles.display}>
-        <input type="text" readOnly value={message} />
+        <input type="text" readOnly value={inputValue} />
       </div>
 
-      <div className={styles.keypad} onClick={(e) => onKeyPress(e)}>
+      <div
+        className={styles.keypad}
+        onClick={(e) =>
+          onKeyPress(e as unknown as React.MouseEvent<HTMLButtonElement>)
+        }
+      >
         <button className={styles.key} value={1}>
           1
         </button>
@@ -46,7 +68,10 @@ const ControlPanel: React.FC<ControlPanelTypes> = (props) => {
         <button className={styles.key} value={9}>
           9
         </button>
-        <button className={clsx(styles.key, styles['key--fullWidth'])} value={0}>
+        <button
+          className={clsx(styles.key, styles["key--fullWidth"])}
+          value={0}
+        >
           0
         </button>
       </div>

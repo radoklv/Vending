@@ -1,6 +1,6 @@
-import { v4 as uuidv4 } from "uuid";
+export const inputRegex = /^\d+$/;
 
-export const MOCK_DATA = [
+export const MOCK_PRODUCTS = [
   {
     id: 1,
     name: "7UP Cherry",

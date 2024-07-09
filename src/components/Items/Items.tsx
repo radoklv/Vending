@@ -9,7 +9,7 @@ const Items: React.FC<ItemsProps> = ({ items }) => {
     <div>
       <ul className={styles.list}>
         {items.map((item) => (
-          <Item item={item} />
+          <Item item={item} key={item.id} />
         ))}
       </ul>
     </div>
