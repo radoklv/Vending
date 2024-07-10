@@ -2,18 +2,22 @@ import { useEffect, useState } from "react";
 
 import styles from "./App.module.scss";
 import { MOCK_PRODUCTS } from "./App.constants";
-import Items from "./components/Items";
-import ControlPanel from "./components/ControlPanel";
 import { inputRegex } from "./App.constants";
+
+import ControlPanel from "./components/ControlPanel";
+import Items from "./components/Items";
+import Wallet from "./components/Wallet";
 
 function App() {
   const [selectedValue, setSelectedValue] = useState("");
-  const [credit, setCredit] = useState(1.2);
-  const [inputValue, setInputValue] = useState("Select product");
+  const [credit, setCredit] = useState(0);
+  const [infoMessage, setInfoMessage] = useState("");
+  const [keybordBlocked, setKeyboardBlocked] = useState(false);
 
   useEffect(() => {
     if (inputRegex.test(selectedValue)) {
       if (+selectedValue > 15) {
+        setInfoMessage("Invalid product");
         return;
       }
 
@@ -21,21 +25,47 @@ function App() {
         (product) => product.id == +selectedValue
       );
 
-      console.log(selectedItem);
-
       if (selectedItem!.price <= credit) {
-        console.log("SUCCESS");
+        setCredit((credit) => credit - selectedItem!.price);
+        setInfoMessage("Take product");
       } else {
-        console.log("FAIL");
+        setInfoMessage(`Credit: ${credit}`);
       }
     }
-  });
+
+    let timer = setTimeout(() => {
+      setInfoMessage("");
+    }, 3000);
+
+    return () => {
+      clearTimeout(timer);
+    };
+  }, [selectedValue]);
+
+  useEffect(() => {
+    setInfoMessage(`Credit: ${credit.toFixed(2)}`);
+
+    let timer = setTimeout(() => {
+      setInfoMessage("");
+    }, 5000);
+
+    return () => {
+      clearTimeout(timer);
+    };
+  }, [credit]);
 
   return (
     <div className={styles.container}>
+      <Wallet
+        onSelectAmount={(amount: number) =>
+          setCredit((credit) => credit + +amount)
+        }
+      />
+
       <section className={styles.vendingTopContainer}>
         <div className={styles.vendingTop}></div>
       </section>
+
       <div className={styles.vending}>
         <div className={styles.vending__content}>
           <div className={styles["vending__content--items"]}>
@@ -53,7 +83,10 @@ function App() {
           </div>
 
           <div className={styles.controlPanel}>
-            <ControlPanel onSelectItem={(value) => setSelectedValue(value)} />
+            <ControlPanel
+              onSelectItem={(value) => setSelectedValue(value)}
+              infoMessage={infoMessage}
+            />
           </div>
         </div>
       </div>

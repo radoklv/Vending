@@ -5,7 +5,10 @@ import clsx from "clsx";
 import type { ControlPanelTypes } from "./ControlPanel.types";
 import styles from "./ControlPanel.module.scss";
 
-const ControlPanel: React.FC<ControlPanelTypes> = ({ onSelectItem }) => {
+const ControlPanel: React.FC<ControlPanelTypes> = ({
+  onSelectItem,
+  infoMessage,
+}) => {
   const [inputValue, setInputValue] = useState("Select product");
 
   const onKeyPress = (e: React.MouseEvent<HTMLButtonElement>) => {
@@ -32,7 +35,7 @@ const ControlPanel: React.FC<ControlPanelTypes> = ({ onSelectItem }) => {
   return (
     <div className={styles.controlPanel}>
       <div className={styles.display}>
-        <input type="text" readOnly value={inputValue} />
+        <input type="text" readOnly value={infoMessage || inputValue} />
       </div>
 
       <div
