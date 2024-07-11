@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 import styles from "./App.module.scss";
 import { INFO_MESSAGE, MOCK_PRODUCTS, STATUS } from "./App.constants";
@@ -7,13 +7,17 @@ import { inputRegex } from "./App.constants";
 import ControlPanel from "./components/ControlPanel";
 import Items from "./components/Items";
 import Wallet from "./components/Wallet";
+import { calculateChange } from "./App.utils";
+import Change from "./components/Change";
 
 function App() {
+  const changeRef = useRef<HTMLDivElement>(null);
   let timer: any;
   const [selectedValue, setSelectedValue] = useState<string>(
     INFO_MESSAGE.ENTER
   );
   const [credit, setCredit] = useState(0);
+  const [change, setChange] = useState<number[]>([]);
   const [infoMessage, setInfoMessage] = useState("");
   const [status, setStatus] = useState(STATUS.INITIAL);
 
@@ -34,9 +38,16 @@ function App() {
         );
 
         if (selectedItem!.price <= credit) {
-          setCredit((credit) => +(credit - selectedItem!.price).toFixed(2));
+          setCredit((credit) => {
+            const updatedCredit = +(credit - selectedItem!.price).toFixed(2);
+            const change = calculateChange(updatedCredit);
+            setChange(change);
+            return updatedCredit;
+          });
+
           setStatus(STATUS.COMPLETED);
           setInfoMessage(INFO_MESSAGE.TAKE);
+
           return;
         } else {
           setInfoMessage(`Credit: ${credit}`);
@@ -73,6 +84,10 @@ function App() {
     }
   }, [credit, status]);
 
+  useEffect(() => {
+    console.log(change);
+  }, [change]);
+
   const onDepositHandler = (amount: number) => {
     if (status === STATUS.INITIAL) {
       setStatus(STATUS.PENDING);
@@ -85,6 +100,12 @@ function App() {
     setStatus(STATUS.INITIAL);
     setInfoMessage(INFO_MESSAGE.ENTER);
     setCredit(0);
+  };
+
+  const scrollToBottomHandler = () => {
+    if (changeRef.current !== null) {
+      changeRef.current.scrollIntoView({ behavior: "smooth" });
+    }
   };
 
   return (
@@ -116,9 +137,17 @@ function App() {
               onSelectItem={(value) => setSelectedValue(value)}
               infoMessage={infoMessage}
               status={status}
+              change={change}
+              onChangeClick={scrollToBottomHandler}
             />
           </div>
         </div>
+      </div>
+
+      <div className={styles.change} ref={changeRef}>
+        {change.length ? (
+          <Change change={change} onTakeChange={() => setChange([])} />
+        ) : null}
       </div>
     </div>
   );

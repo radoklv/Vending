@@ -1,0 +1,17 @@
+.title {
+  color: #fff;
+}
+
+.coins {
+  padding: 0;
+  margin: 0;
+  display: flex;
+  list-style: none;
+  align-items: center;
+  flex-wrap: wrap;
+
+  .coin {
+    margin: 0 5px;
+    cursor: pointer;
+  }
+}

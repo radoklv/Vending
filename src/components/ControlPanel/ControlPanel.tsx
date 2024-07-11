@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState, forwardRef } from "react";
 import { debounce } from "lodash";
 import clsx from "clsx";
 
@@ -8,8 +8,10 @@ import { INFO_MESSAGE, STATUS, inputRegex } from "../../App.constants";
 
 const ControlPanel: React.FC<ControlPanelTypes> = ({
   onSelectItem,
+  onChangeClick,
   infoMessage,
   status,
+  change,
 }) => {
   const [inputValue, setInputValue] = useState<string>(infoMessage || "");
 
@@ -92,7 +94,16 @@ const ControlPanel: React.FC<ControlPanelTypes> = ({
 
       <span>Change</span>
 
-      <div className={styles.change} />
+      <div className={styles.change} onClick={onChangeClick}>
+        {change.length ? (
+          <img
+            src="images/coins/change.png"
+            alt="change"
+            className={styles.changeIcon}
+            onClick={onChangeClick}
+          />
+        ) : null}
+      </div>
     </div>
   );
 };
