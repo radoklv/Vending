@@ -9,6 +9,8 @@ import Items from "./components/Items";
 import Wallet from "./components/Wallet";
 import { calculateChange } from "./App.utils";
 import Change from "./components/Change";
+import clsx from "clsx";
+import { Item } from "./App.types";
 
 function App() {
   const changeRef = useRef<HTMLDivElement>(null);
@@ -20,6 +22,8 @@ function App() {
   const [change, setChange] = useState<number[]>([]);
   const [infoMessage, setInfoMessage] = useState("");
   const [status, setStatus] = useState(STATUS.INITIAL);
+  const [selectedItem, setSelectedItem] = useState<Item | undefined>();
+  const [isDoorOpen, setIsDoorOpen] = useState(false);
 
   useEffect(() => {
     if (status === STATUS.COMPLETED) {
@@ -45,9 +49,9 @@ function App() {
             return updatedCredit;
           });
 
-          setStatus(STATUS.COMPLETED);
-          setInfoMessage(INFO_MESSAGE.TAKE);
-
+          setSelectedItem(selectedItem);
+          setStatus(STATUS.PREPEARING);
+          setInfoMessage(INFO_MESSAGE.ONE_MOMENT);
           return;
         } else {
           setInfoMessage(`Credit: ${credit}`);
@@ -56,6 +60,11 @@ function App() {
     }
 
     timer = setTimeout(() => {
+      if (status === STATUS.PREPEARING) {
+        setStatus(STATUS.COMPLETED);
+        setInfoMessage(INFO_MESSAGE.TAKE);
+      }
+
       if (status === STATUS.PENDING) {
         setInfoMessage("");
       }
@@ -119,11 +128,33 @@ function App() {
       <div className={styles.vending}>
         <div className={styles.vending__content}>
           <div className={styles["vending__content--items"]}>
-            <Items items={MOCK_PRODUCTS}></Items>
+            <Items
+              items={MOCK_PRODUCTS}
+              selectedItemId={selectedItem?.id}
+              status={status}
+            ></Items>
           </div>
 
-          <div className={styles.door}>
-            <h2 onClick={onResetHandler}>PUSH</h2>
+          <div
+            className={styles.door}
+            onMouseEnter={() => setIsDoorOpen(true)}
+            onMouseLeave={() => setIsDoorOpen(false)}
+          >
+            {isDoorOpen ? (
+              <div className={clsx(styles.door, styles["door--opened"])}>
+                {status === STATUS.COMPLETED && (
+                  <img
+                    src={`/images/products/${selectedItem?.imageName}`}
+                    alt="product"
+                    onClick={onResetHandler}
+                  />
+                )}
+              </div>
+            ) : (
+              <div className={clsx(styles.door, styles["door--closed"])}>
+                <h2>PUSH</h2>
+              </div>
+            )}
           </div>
         </div>
 

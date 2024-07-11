@@ -13,7 +13,7 @@ const Change: React.FC<ChangesProps> = ({ change, onTakeChange }) => {
       return;
     }
 
-    const res = change.map((coin) => {
+    const mappedCoins = change.map((coin) => {
       switch (coin) {
         case 0.01:
           return "1st.png";
@@ -36,7 +36,7 @@ const Change: React.FC<ChangesProps> = ({ change, onTakeChange }) => {
       }
     });
 
-    setCoins(res);
+    setCoins(mappedCoins);
   }, [change]);
 
   return (

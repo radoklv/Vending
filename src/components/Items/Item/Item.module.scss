@@ -13,6 +13,35 @@
 
   .price {
     color: #fff;
-    font-size: 12px
+    font-size: 12px;
+  }
+  .icon {
+    &--animation {
+      animation: shake 6s normal;
+    }
+  }
+}
+
+@keyframes shake {
+  0% {
+    transform: rotate(-20deg);
+  }
+  10% {
+    transform: rotate(20deg);
+  }
+  20% {
+    transform: rotate(-20deg);
+  }
+  30% {
+    transform: rotate(20deg);
+  }
+  40% {
+    transform: rotate(-20deg);
+  }
+  50% {
+    transform: rotate(20deg);
+  }
+  100% {
+    transform: translateY(1000px);
   }
 }

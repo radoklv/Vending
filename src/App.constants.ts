@@ -3,6 +3,7 @@ export const inputRegex = /^\d+$/;
 export enum STATUS {
   INITIAL = "initial",
   PENDING = "pending",
+  PREPEARING = "prepearing",
   COMPLETED = "completed",
 }
 
@@ -11,6 +12,7 @@ export enum INFO_MESSAGE {
   SELECT = "Select product",
   TAKE = "Take product",
   INVALID = "Invalid product",
+  ONE_MOMENT = "One moment please",
 }
 
 export const MOCK_PRODUCTS = [
