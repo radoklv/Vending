@@ -7,7 +7,7 @@ const Wallet: React.FC<WalletTypes> = ({ onSelectAmount }) => {
   return (
     <div className={styles.wallet}>
       <div className={styles.title}>
-        <h2>Enter from selected coins:</h2>
+        <h2>Deposit from selected coins:</h2>
       </div>
 
       <div className={styles.coins}>

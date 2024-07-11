@@ -2,8 +2,6 @@ import React, { useEffect, useState } from "react";
 
 import styles from "./Change.module.scss";
 import type { ChangesProps } from "./Change.types";
-import { calculateChange } from "../../App.utils";
-import { link } from "fs";
 
 const Change: React.FC<ChangesProps> = ({ change, onTakeChange }) => {
   const [coins, setCoins] = useState<string[]>([]);

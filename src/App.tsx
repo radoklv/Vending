@@ -111,6 +111,14 @@ function App() {
     setCredit(0);
   };
 
+  const onResetClick = () => {
+    if (credit) {
+      const change = calculateChange(credit);
+      setChange(change);
+      onResetHandler();
+    }
+  };
+
   const scrollToBottomHandler = () => {
     if (changeRef.current !== null) {
       changeRef.current.scrollIntoView({ behavior: "smooth" });
@@ -170,6 +178,7 @@ function App() {
               status={status}
               change={change}
               onChangeClick={scrollToBottomHandler}
+              onResetClick={onResetClick}
             />
           </div>
         </div>

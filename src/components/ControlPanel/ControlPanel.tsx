@@ -1,5 +1,4 @@
-import React, { useCallback, useEffect, useState, forwardRef } from "react";
-import { debounce } from "lodash";
+import React, { useEffect, useState } from "react";
 import clsx from "clsx";
 
 import type { ControlPanelTypes } from "./ControlPanel.types";
@@ -9,6 +8,7 @@ import { INFO_MESSAGE, STATUS, inputRegex } from "../../App.constants";
 const ControlPanel: React.FC<ControlPanelTypes> = ({
   onSelectItem,
   onChangeClick,
+  onResetClick,
   infoMessage,
   status,
   change,
@@ -54,43 +54,49 @@ const ControlPanel: React.FC<ControlPanelTypes> = ({
         }
       >
         <button className={styles.key} value={1}>
-          1
+          <span>1</span>
         </button>
         <button className={styles.key} value={2}>
-          2
+          <span>2</span>
         </button>
         <button className={styles.key} value={3}>
-          3
+          <span>3</span>
         </button>
         <button className={styles.key} value={4}>
-          4
+          <span>4</span>
         </button>
         <button className={styles.key} value={5}>
-          5
+          <span>5</span>
         </button>
         <button className={styles.key} value={6}>
-          6
+          <span>6</span>
         </button>
         <button className={styles.key} value={7}>
-          7
+          <span>7</span>
         </button>
         <button className={styles.key} value={8}>
-          8
+          <span>8</span>
         </button>
         <button className={styles.key} value={9}>
-          9
+          <span>9</span>
         </button>
         <button
           className={clsx(styles.key, styles["key--fullWidth"])}
           value={0}
         >
-          0
+          <span>0</span>
         </button>
       </div>
 
       <span>Coins</span>
 
-      <div className={styles.moneyIn} />
+      <div className={styles.moneyCollector}>
+        <span className={styles.moneyIn} />
+
+        <button className={styles.reset} onClick={onResetClick}>
+          <img src="/images/reset.png" alt="reset" />
+        </button>
+      </div>
 
       <span>Change</span>
 
