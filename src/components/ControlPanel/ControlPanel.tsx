@@ -4,15 +4,22 @@ import clsx from "clsx";
 
 import type { ControlPanelTypes } from "./ControlPanel.types";
 import styles from "./ControlPanel.module.scss";
+import { INFO_MESSAGE, STATUS, inputRegex } from "../../App.constants";
 
 const ControlPanel: React.FC<ControlPanelTypes> = ({
   onSelectItem,
   infoMessage,
+  status,
 }) => {
-  const [inputValue, setInputValue] = useState("Select product");
+  const [inputValue, setInputValue] = useState<string>(infoMessage || "");
 
   const onKeyPress = (e: React.MouseEvent<HTMLButtonElement>) => {
-    if (inputValue === "Select product") {
+    if (status === STATUS.INITIAL || status === STATUS.COMPLETED) {
+      return;
+    }
+
+    if (!inputRegex.test(inputValue)) {
+      // Test if input value is a number
       setInputValue("");
     }
 
@@ -23,9 +30,9 @@ const ControlPanel: React.FC<ControlPanelTypes> = ({
 
   useEffect(() => {
     let timer = setTimeout(() => {
-      setInputValue("Select product");
+      setInputValue(INFO_MESSAGE.SELECT);
       onSelectItem(inputValue);
-    }, 2000);
+    }, 3000);
 
     return () => {
       clearTimeout(timer);

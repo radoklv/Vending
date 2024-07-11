@@ -1,5 +1,18 @@
 export const inputRegex = /^\d+$/;
 
+export enum STATUS {
+  INITIAL = "initial",
+  PENDING = "pending",
+  COMPLETED = "completed",
+}
+
+export enum INFO_MESSAGE {
+  ENTER = "Enter money",
+  SELECT = "Select product",
+  TAKE = "Take product",
+  INVALID = "Invalid product",
+}
+
 export const MOCK_PRODUCTS = [
   {
     id: 1,

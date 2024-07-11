@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 
 import styles from "./App.module.scss";
-import { MOCK_PRODUCTS } from "./App.constants";
+import { INFO_MESSAGE, MOCK_PRODUCTS, STATUS } from "./App.constants";
 import { inputRegex } from "./App.constants";
 
 import ControlPanel from "./components/ControlPanel";
@@ -9,32 +9,45 @@ import Items from "./components/Items";
 import Wallet from "./components/Wallet";
 
 function App() {
-  const [selectedValue, setSelectedValue] = useState("");
+  let timer: any;
+  const [selectedValue, setSelectedValue] = useState<string>(
+    INFO_MESSAGE.ENTER
+  );
   const [credit, setCredit] = useState(0);
   const [infoMessage, setInfoMessage] = useState("");
-  const [keybordBlocked, setKeyboardBlocked] = useState(false);
+  const [status, setStatus] = useState(STATUS.INITIAL);
 
   useEffect(() => {
-    if (inputRegex.test(selectedValue)) {
-      if (+selectedValue > 15) {
-        setInfoMessage("Invalid product");
-        return;
-      }
+    if (status === STATUS.COMPLETED) {
+      return;
+    } else if (status === STATUS.INITIAL) {
+      setInfoMessage(INFO_MESSAGE.ENTER);
+    } else {
+      if (inputRegex.test(selectedValue)) {
+        if (+selectedValue > 15) {
+          setInfoMessage(INFO_MESSAGE.INVALID);
+          return;
+        }
 
-      const selectedItem = MOCK_PRODUCTS.find(
-        (product) => product.id == +selectedValue
-      );
+        const selectedItem = MOCK_PRODUCTS.find(
+          (product) => product.id == +selectedValue
+        );
 
-      if (selectedItem!.price <= credit) {
-        setCredit((credit) => credit - selectedItem!.price);
-        setInfoMessage("Take product");
-      } else {
-        setInfoMessage(`Credit: ${credit}`);
+        if (selectedItem!.price <= credit) {
+          setCredit((credit) => +(credit - selectedItem!.price).toFixed(2));
+          setStatus(STATUS.COMPLETED);
+          setInfoMessage(INFO_MESSAGE.TAKE);
+          return;
+        } else {
+          setInfoMessage(`Credit: ${credit}`);
+        }
       }
     }
 
-    let timer = setTimeout(() => {
-      setInfoMessage("");
+    timer = setTimeout(() => {
+      if (status === STATUS.PENDING) {
+        setInfoMessage("");
+      }
     }, 3000);
 
     return () => {
@@ -43,24 +56,40 @@ function App() {
   }, [selectedValue]);
 
   useEffect(() => {
-    setInfoMessage(`Credit: ${credit.toFixed(2)}`);
+    if (status === STATUS.COMPLETED) {
+      return;
+    }
 
-    let timer = setTimeout(() => {
-      setInfoMessage("");
-    }, 5000);
+    if (status === STATUS.PENDING) {
+      setInfoMessage(`Credit: ${credit.toFixed(2)}`);
 
-    return () => {
-      clearTimeout(timer);
-    };
-  }, [credit]);
+      timer = setTimeout(() => {
+        setInfoMessage("");
+      }, 3000);
+
+      return () => {
+        clearTimeout(timer);
+      };
+    }
+  }, [credit, status]);
+
+  const onDepositHandler = (amount: number) => {
+    if (status === STATUS.INITIAL) {
+      setStatus(STATUS.PENDING);
+    }
+
+    setCredit((credit) => +(credit + amount).toFixed(2));
+  };
+
+  const onResetHandler = () => {
+    setStatus(STATUS.INITIAL);
+    setInfoMessage(INFO_MESSAGE.ENTER);
+    setCredit(0);
+  };
 
   return (
     <div className={styles.container}>
-      <Wallet
-        onSelectAmount={(amount: number) =>
-          setCredit((credit) => credit + +amount)
-        }
-      />
+      <Wallet onSelectAmount={(amount) => onDepositHandler(amount)} />
 
       <section className={styles.vendingTopContainer}>
         <div className={styles.vendingTop}></div>
@@ -73,7 +102,7 @@ function App() {
           </div>
 
           <div className={styles.door}>
-            <h2>PUSH</h2>
+            <h2 onClick={onResetHandler}>PUSH</h2>
           </div>
         </div>
 
@@ -86,6 +115,7 @@ function App() {
             <ControlPanel
               onSelectItem={(value) => setSelectedValue(value)}
               infoMessage={infoMessage}
+              status={status}
             />
           </div>
         </div>
