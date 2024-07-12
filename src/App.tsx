@@ -88,6 +88,7 @@ function App() {
       if (status === STATUS.PREPEARING) {
         setStatus(STATUS.COMPLETED);
         setInfoMessage(INFO_MESSAGE.TAKE);
+        scrollToBottomHandler();
       }
 
       if (status === STATUS.PENDING) {
