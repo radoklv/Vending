@@ -5,6 +5,8 @@
   justify-content: flex-end;
   align-items: center;
   width: 100%;
+  margin: 0 auto;
+  text-align: center;
 
   img {
     width: 100%;
@@ -44,5 +46,11 @@
 
   100% {
     transform: translateY(1000px);
+  }
+}
+
+@media only screen and (max-width: 600px) {
+  .item {
+    width: 100%;
   }
 }

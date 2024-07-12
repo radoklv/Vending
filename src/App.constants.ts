@@ -13,6 +13,7 @@ export enum INFO_MESSAGE {
   TAKE = "Please take the product ",
   INVALID = "Invalid product",
   ONE_MOMENT = "One moment please",
+  TAKE_CHANGE = "Please take change"
 }
 
 export const PRODUCTS = [

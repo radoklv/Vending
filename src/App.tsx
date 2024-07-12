@@ -94,6 +94,7 @@ function App() {
 
   const onDepositHandler = (amount: number) => {
     if (status === STATUS.INITIAL) {
+      setChange([]);
       setStatus(STATUS.PENDING);
     }
 
@@ -101,8 +102,8 @@ function App() {
   };
 
   const resetStateHandler = () => {
-    setStatus(STATUS.INITIAL);
     setInfoMessage(INFO_MESSAGE.ENTER);
+    setStatus(STATUS.INITIAL);
     setCredit(0);
   };
 
@@ -112,6 +113,11 @@ function App() {
       setChange(change);
       resetStateHandler();
     }
+  };
+
+  const onChangeClick = () => {
+    setChange([]);
+    resetStateHandler();
   };
 
   const scrollToBottomHandler = () => {
@@ -181,7 +187,7 @@ function App() {
 
       <div className={styles.change} ref={changeRef}>
         {change.length ? (
-          <Change change={change} onTakeChange={() => setChange([])} />
+          <Change change={change} onTakeChange={onChangeClick} />
         ) : null}
       </div>
     </div>

@@ -123,3 +123,34 @@
     transform: translate(0, 0);
   }
 }
+
+@media only screen and (max-width: 450px) {
+  .controlPanel {
+    .keypad {
+      display: flex;
+      flex-wrap: wrap;
+      width: 90%;
+      margin-bottom: 20px;
+
+      .key {
+        width: 50%;
+
+        span {
+          line-height: 12px;
+        }
+
+        &:nth-child(2),
+        &:nth-child(5),
+        &:nth-child(8) {
+          margin: 3px 0;
+        }
+      }
+    }
+
+    .change {
+      & .changeIcon {
+        width: 30%;
+      }
+    }
+  }
+}
