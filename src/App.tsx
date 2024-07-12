@@ -142,11 +142,6 @@ function App() {
     }
   };
 
-  const onChangeClick = () => {
-    setChange([]);
-    resetStateHandler();
-  };
-
   const scrollToBottomHandler = () => {
     if (changeRef.current !== null) {
       changeRef.current.scrollIntoView({ behavior: "smooth" });
@@ -240,7 +235,7 @@ function App() {
 
       <div className={styles.change} ref={changeRef}>
         {change.length ? (
-          <Change change={change} onTakeChange={onChangeClick} />
+          <Change change={change} onTakeChange={() => setChange([])} />
         ) : null}
       </div>
     </div>
