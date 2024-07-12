@@ -10,9 +10,12 @@ import Wallet from "./components/Wallet";
 import { calculateChange } from "./App.utils";
 import Change from "./components/Change";
 import clsx from "clsx";
-import { Item } from "./App.types";
+import { Product } from "./App.types";
 
 function App() {
+  const [isLoading, setIsLoading] = useState(true);
+  const [products, setProducts] = useState<Product[]>();
+  const [error, setError] = useState<any>();
   let timer: any;
   const changeRef = useRef<HTMLDivElement>(null);
   const [selectedValue, setSelectedValue] = useState<string>(
@@ -22,8 +25,31 @@ function App() {
   const [change, setChange] = useState<number[]>([]);
   const [infoMessage, setInfoMessage] = useState("");
   const [status, setStatus] = useState(STATUS.INITIAL);
-  const [selectedItem, setSelectedItem] = useState<Item>();
+  const [selectedItem, setSelectedItem] = useState<Product>();
   const [isDoorOpen, setIsDoorOpen] = useState(false);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await fetch("http://localhost:4000/api/products/", {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        });
+        if (response.ok) {
+          throw new Error("Failed to fetch products");
+        }
+        const result = await response.json();
+        setProducts(result.products || []);
+      } catch (error) {
+        setError(error);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    fetchData();
+  }, []);
 
   useEffect(() => {
     if (status === STATUS.COMPLETED) {
@@ -36,7 +62,7 @@ function App() {
         if (+selectedValue > 15) {
           setInfoMessage(INFO_MESSAGE.INVALID);
         } else {
-          const selectedItem = PRODUCTS.find(
+          const selectedItem = products!.find(
             (product) => product.id == +selectedValue
           );
 
@@ -126,6 +152,32 @@ function App() {
     }
   };
 
+  const onResetError = () => {
+    setProducts(PRODUCTS);
+    setError(undefined);
+  };
+
+  if (isLoading) {
+    return (
+      <div className={styles.loading}>
+        <div>
+          <p>Loading...</p>
+        </div>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className={styles.error}>
+        <div>
+          <p>{error.message}</p>
+          <button onClick={onResetError}>Continue with local one?</button>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className={styles.container}>
       <Wallet onSelectAmount={(amount) => onDepositHandler(amount)} />
@@ -138,7 +190,7 @@ function App() {
         <div className={styles.vending__content}>
           <div className={styles["vending__content--items"]}>
             <Items
-              items={PRODUCTS}
+              items={products || []}
               selectedItemId={selectedItem?.id}
               status={status}
             ></Items>

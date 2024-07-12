@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from "react";
 import clsx from "clsx";
 
-import type { ControlPanelTypes } from "./ControlPanel.types";
+import type { ControlPanelProps } from "./ControlPanel.types";
 import styles from "./ControlPanel.module.scss";
 import { INFO_MESSAGE, STATUS, inputRegex } from "../../App.constants";
 
-const ControlPanel: React.FC<ControlPanelTypes> = ({
+const ControlPanel: React.FC<ControlPanelProps> = ({
   onSelectItem,
   onChangeClick,
   onResetClick,

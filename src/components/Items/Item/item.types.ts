@@ -1,8 +1,8 @@
 import { STATUS } from "../../../App.constants";
-import { Item } from "../../../App.types";
+import { Product } from "../../../App.types";
 
 export type ItemProps = {
-  item: Item;
+  item: Product;
   selectedItemId?: number;
   status: STATUS;
 };

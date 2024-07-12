@@ -1,6 +1,6 @@
 import { STATUS } from "../../App.constants";
 
-export type ControlPanelTypes = {
+export type ControlPanelProps = {
   onSelectItem: (value: string) => void;
   onChangeClick: () => void;
   onResetClick: () => void;

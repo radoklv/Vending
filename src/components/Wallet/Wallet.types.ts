@@ -1,3 +1,3 @@
-export type WalletTypes = {
+export type WalletProps = {
   onSelectAmount: (amount: number) => void;
 };

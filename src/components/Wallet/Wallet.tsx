@@ -1,9 +1,9 @@
 import React from "react";
 
-import type { WalletTypes } from "./Wallet.types";
+import type { WalletProps } from "./Wallet.types";
 import styles from "./Wallet.module.scss";
 
-const Wallet: React.FC<WalletTypes> = ({ onSelectAmount }) => {
+const Wallet: React.FC<WalletProps> = ({ onSelectAmount }) => {
   return (
     <div className={styles.wallet}>
       <div className={styles.title}>

@@ -9,6 +9,7 @@ const Item: React.FC<ItemProps> = ({ item, selectedItemId, status }) => {
   const { id, imageName, name, price } = item;
 
   const applyAnimation = status === STATUS.PREPEARING && id === selectedItemId;
+
   return (
     <li className={styles.item}>
       <img
