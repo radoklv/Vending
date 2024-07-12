@@ -1,5 +1,3 @@
-# Getting Started with Create React App
-
 First you need to start BE project
 
 Then
