@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 
 import styles from "./App.module.scss";
-import { INFO_MESSAGE, MOCK_PRODUCTS, STATUS } from "./App.constants";
+import { INFO_MESSAGE, PRODUCTS, STATUS } from "./App.constants";
 import { inputRegex } from "./App.constants";
 
 import ControlPanel from "./components/ControlPanel";
@@ -13,8 +13,8 @@ import clsx from "clsx";
 import { Item } from "./App.types";
 
 function App() {
-  const changeRef = useRef<HTMLDivElement>(null);
   let timer: any;
+  const changeRef = useRef<HTMLDivElement>(null);
   const [selectedValue, setSelectedValue] = useState<string>(
     INFO_MESSAGE.ENTER
   );
@@ -22,7 +22,7 @@ function App() {
   const [change, setChange] = useState<number[]>([]);
   const [infoMessage, setInfoMessage] = useState("");
   const [status, setStatus] = useState(STATUS.INITIAL);
-  const [selectedItem, setSelectedItem] = useState<Item | undefined>();
+  const [selectedItem, setSelectedItem] = useState<Item>();
   const [isDoorOpen, setIsDoorOpen] = useState(false);
 
   useEffect(() => {
@@ -30,31 +30,30 @@ function App() {
       return;
     } else if (status === STATUS.INITIAL) {
       setInfoMessage(INFO_MESSAGE.ENTER);
+      return;
     } else {
       if (inputRegex.test(selectedValue)) {
         if (+selectedValue > 15) {
           setInfoMessage(INFO_MESSAGE.INVALID);
-          return;
-        }
-
-        const selectedItem = MOCK_PRODUCTS.find(
-          (product) => product.id == +selectedValue
-        );
-
-        if (selectedItem!.price <= credit) {
-          setCredit((credit) => {
-            const updatedCredit = +(credit - selectedItem!.price).toFixed(2);
-            const change = calculateChange(updatedCredit);
-            setChange(change);
-            return updatedCredit;
-          });
-
-          setSelectedItem(selectedItem);
-          setStatus(STATUS.PREPEARING);
-          setInfoMessage(INFO_MESSAGE.ONE_MOMENT);
-          return;
         } else {
-          setInfoMessage(`Credit: ${credit}`);
+          const selectedItem = PRODUCTS.find(
+            (product) => product.id == +selectedValue
+          );
+
+          if (selectedItem!.price <= credit) {
+            setCredit((prevCredit) => {
+              const accCredit = +(prevCredit - selectedItem!.price).toFixed(2);
+              setChange(calculateChange(accCredit));
+              return accCredit;
+            });
+
+            setSelectedItem(selectedItem);
+            setStatus(STATUS.PREPEARING);
+            setInfoMessage(INFO_MESSAGE.ONE_MOMENT);
+            return;
+          } else {
+            setInfoMessage(`Credit: ${credit}`);
+          }
         }
       }
     }
@@ -91,21 +90,17 @@ function App() {
         clearTimeout(timer);
       };
     }
-  }, [credit, status]);
-
-  useEffect(() => {
-    console.log(change);
-  }, [change]);
+  }, [credit]);
 
   const onDepositHandler = (amount: number) => {
     if (status === STATUS.INITIAL) {
       setStatus(STATUS.PENDING);
     }
 
-    setCredit((credit) => +(credit + amount).toFixed(2));
+    setCredit((prevCredit) => +(prevCredit + amount).toFixed(2));
   };
 
-  const onResetHandler = () => {
+  const resetStateHandler = () => {
     setStatus(STATUS.INITIAL);
     setInfoMessage(INFO_MESSAGE.ENTER);
     setCredit(0);
@@ -115,7 +110,7 @@ function App() {
     if (credit) {
       const change = calculateChange(credit);
       setChange(change);
-      onResetHandler();
+      resetStateHandler();
     }
   };
 
@@ -137,7 +132,7 @@ function App() {
         <div className={styles.vending__content}>
           <div className={styles["vending__content--items"]}>
             <Items
-              items={MOCK_PRODUCTS}
+              items={PRODUCTS}
               selectedItemId={selectedItem?.id}
               status={status}
             ></Items>
@@ -154,7 +149,7 @@ function App() {
                   <img
                     src={`/images/products/${selectedItem?.imageName}`}
                     alt="product"
-                    onClick={onResetHandler}
+                    onClick={resetStateHandler}
                   />
                 )}
               </div>

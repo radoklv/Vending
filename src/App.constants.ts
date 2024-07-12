@@ -1,4 +1,4 @@
-export const inputRegex = /^\d+$/;
+export const inputRegex = /^\d+$/; //Regex for numbers only
 
 export enum STATUS {
   INITIAL = "initial",
@@ -10,12 +10,12 @@ export enum STATUS {
 export enum INFO_MESSAGE {
   ENTER = "Enter money",
   SELECT = "Select product",
-  TAKE = "Take product",
+  TAKE = "Please take the product ",
   INVALID = "Invalid product",
   ONE_MOMENT = "One moment please",
 }
 
-export const MOCK_PRODUCTS = [
+export const PRODUCTS = [
   {
     id: 1,
     name: "7UP Cherry",

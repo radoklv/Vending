@@ -16,7 +16,9 @@ const ControlPanel: React.FC<ControlPanelTypes> = ({
   const [inputValue, setInputValue] = useState<string>(infoMessage || "");
 
   const onKeyPress = (e: React.MouseEvent<HTMLButtonElement>) => {
-    if (status === STATUS.INITIAL || status === STATUS.COMPLETED) {
+    const value = (e.target as HTMLButtonElement)?.value;
+
+    if (!value || status === STATUS.INITIAL || status === STATUS.COMPLETED) {
       return;
     }
 
@@ -24,8 +26,6 @@ const ControlPanel: React.FC<ControlPanelTypes> = ({
       // Test if input value is a number
       setInputValue("");
     }
-
-    const value = (e.target as HTMLButtonElement).value;
 
     setInputValue((prev) => prev + value);
   };
