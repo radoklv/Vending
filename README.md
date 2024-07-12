@@ -2,15 +2,17 @@
 
 First you need to start BE project
 
-#then
+Then
 
 In the project directory, you can run:
 
+```bash
 npm install
 #then
 npm run start
+```
 
-NOTE: Please use at leas node v 16.14.0
+NOTE: Please use at least node v 16.14.0
 
 Runs the app in the development mode.\
 Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
