@@ -36,7 +36,7 @@ function App() {
             "Content-Type": "application/json",
           },
         });
-        if (response.ok) {
+        if (!response.ok) {
           throw new Error("Failed to fetch products");
         }
         const result = await response.json();
@@ -172,7 +172,7 @@ function App() {
       <div className={styles.error}>
         <div>
           <p>{error.message}</p>
-          <button onClick={onResetError}>Continue with local one?</button>
+          <button onClick={onResetError}>Continue with local data</button>
         </div>
       </div>
     );
